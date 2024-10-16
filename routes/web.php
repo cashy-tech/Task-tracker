@@ -14,5 +14,25 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return "This is the main page";
+});
+
+Route::get('/hello', function(){
+    return "Hello World!";
+})->name('hello'); //naming routes
+
+//Redirecting routes
+Route::get('hallo', function(){
+    //return redirect('hello');
+    return redirect()->route('hello');
+});
+
+//dynamic routes
+Route::get('/greetings/{name}', function($name){
+    return "Good Afternoon ". $name. "." . " Welcome!";
+});
+
+//fallback route
+Route::fallback(function(){
+    return "Page not found";
 });
