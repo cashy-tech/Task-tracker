@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,14 +66,26 @@ $tasks = [
     '2023-03-04 12:00:00'
   ),
 ];
-Route::get('/', function () use($tasks){
+
+Route::get('/', function (){
+    redirect()->route('task.index');
+});
+
+Route::get('/tasks', function () use($tasks){
     return view('index', [
         'tasks' => $tasks
     ]);
 })->name('task.index');
 
-Route::get('/id', function(){
-    return "One single task";
+Route::get('/tasks/{id}', function($id) use($tasks){
+    $task=collect($tasks)->firstWhere('id', $id);
+
+    if(!$task){
+        abort(Response::HTTP_NOT_FOUND);
+    }
+    return view('show', [
+        "task"=>$task
+    ]);
 })->name('task.show');
 
 // Route::get('/hello', function(){
